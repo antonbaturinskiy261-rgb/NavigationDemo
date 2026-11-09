@@ -10,13 +10,13 @@ kotlin = "2.2.10"
 composeBom = "2026.02.01"
 navigation3 = "1.0.0-alpha05"
 kotlinSerialization = "2.2.0"
-kotlinxSerializationCore = "1.7.3"
+
 
 [libraries]
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
-kotlinx-serialization-core = { module = "org.jetbrains.kotlin:kotlinx-serialization-core", version.ref = "kotlinxSerializationCore" }
-kotlinx-serialization-json = { module = "org.jetbrains.kotlin:kotlinx-serialization-json", version.ref = "kotlinxSerializationCore" }
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
