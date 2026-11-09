@@ -1,18 +1,22 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    // Добавлен плагин для сериализации
+    alias(libs.plugins.jetbrains.kotlin.serialization)
 }
 
 android {
     namespace = "com.example.navigationdemo"
+
+    // Для Navigation 3 из методички требуется SDK 36
     compileSdk {
-        version = release(37)
+        version = release(36)
     }
 
     defaultConfig {
         applicationId = "com.example.navigationdemo"
-        minSdk = 24
-        targetSdk = 37
+        minSdk = 27 // Рекомендую 27, как в других лабах, но можно оставить 24
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -44,6 +48,13 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+
+    // НОВЫЕ БИБЛИОТЕКИ ДЛЯ НАВИГАЦИИ:
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.kotlinx.serialization.json)
+
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
