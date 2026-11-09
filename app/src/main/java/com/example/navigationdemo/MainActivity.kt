@@ -7,10 +7,17 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entry
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
+import com.example.navigationdemo.screens.Home
+import com.example.navigationdemo.screens.Profile
+import com.example.navigationdemo.screens.Welcome
 import com.example.navigationdemo.ui.theme.NavigationDemoTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,10 +27,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             NavigationDemoTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    MainScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -31,17 +35,46 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
+fun MainScreen(modifier: Modifier = Modifier) {
+    // 1. Создаем стек навигации и инициализируем его главным экраном
+    val backStack = rememberNavBackStack(HomeScreen)
+
+    // 2. Обработчик для перехода ВПЕРЕД (добавляет экран в стек)
+    val onNavigation: (NavKey) -> Unit = { backStack.add(it) }
+
+    // 3. Обработчик для очистки стека и возврата на главный экран
+    val onClearBackStack: () -> Unit = {
+        while (backStack.size > 1) {
+            backStack.removeLastOrNull()
+        }
+    }
+
+    // 4. NavDisplay управляет показом нужного экрана
+    NavDisplay(
+        modifier = modifier.fillMaxSize(),
+        backStack = backStack,
+        onBack = { backStack.removeLastOrNull() }, // Обработка системной кнопки "Назад"
+        entryProvider = entryProvider {
+            // Привязываем ключи к экранам
+            entry<HomeScreen> {
+                Home(onNavigation)
+            }
+            entry<WelcomeScreen> { key ->
+                Welcome(onNavigation, key.name)
+            }
+            entry<ProfileScreen> {
+                Profile(onClearBackStack)
+            }
+        }
     )
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun GreetingPreview() {
+fun MainScreenPreview() {
     NavigationDemoTheme {
-        Greeting("Android")
+        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+            MainScreen(modifier = Modifier.padding(innerPadding))
+        }
     }
 }
