@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.runtime.NavKey
-import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
@@ -36,26 +35,25 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
-    // 1. Создаем стек навигации и инициализируем его главным экраном
+    // Инициализируем стек навигации главным экраном
     val backStack = rememberNavBackStack(HomeScreen)
 
-    // 2. Обработчик для перехода ВПЕРЕД (добавляет экран в стек)
+    // Добавление нового экрана в стек
     val onNavigation: (NavKey) -> Unit = { backStack.add(it) }
 
-    // 3. Обработчик для очистки стека и возврата на главный экран
+    // Очистка стека (возврат на главный экран)
     val onClearBackStack: () -> Unit = {
         while (backStack.size > 1) {
             backStack.removeLastOrNull()
         }
     }
 
-    // 4. NavDisplay управляет показом нужного экрана
+    // Отображение экранов
     NavDisplay(
         modifier = modifier.fillMaxSize(),
         backStack = backStack,
-        onBack = { backStack.removeLastOrNull() }, // Обработка системной кнопки "Назад"
+        onBack = { backStack.removeLastOrNull() },
         entryProvider = entryProvider {
-            // Привязываем ключи к экранам
             entry<HomeScreen> {
                 Home(onNavigation)
             }
@@ -69,7 +67,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
     )
 }
 
-@Preview(showBackground = true, showSystemUi = true)
+@Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
     NavigationDemoTheme {
